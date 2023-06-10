@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  # celestia:
+  #   image: ghcr.io/smuu/rollkit-local-celestia-devnet:3a3ac8f
+  #   restart: unless-stopped
+  #   expose:
+  #     - "26657"
+  #     - "26659"
+  #   # Rollup can't start until after DA starts.
+  #   # This ensures it waits 5 seconds so the rollup can query it.
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:26657/block?height=1"]
+  #     interval: 5s
+  #     timeout: 10s
+  #     retries: 5
+  #   volumes:
+  #     - ./data/devnet/app:/home/celestia/.celestia-app/
+  #     - ./data/devnet/bridge:/bridge
+  light-node-x:
+    image: ghcr.io/celestiaorg/celestia-node:v0.11.0-rc2
+    restart: unless-stopped
+    expose:
+      - "26659"
+    environment:
+      - NODE_TYPE=light
+      - P2P_NETWORK=arabica-8
+    command: celestia light start --core.ip consensus-full-arabica-8.celestia-arabica.com --gateway --gateway.addr 0.0.0.0 --gateway.port 26659 --p2p.network arabica-8
+    volumes:
+      - ./data/light-node-x:/home/celestia/.celestia-light-arabica-8/
+  light-node-y:
+    image: ghcr.io/celestiaorg/celestia-node:v0.11.0-rc2
+    restart: unless-stopped
+    expose:
+      - "26659"
+    environment:
+      - NODE_TYPE=light
+      - P2P_NETWORK=arabica-8
+    command: celestia light start --core.ip consensus-full-arabica-8.celestia-arabica.com --gateway --gateway.addr 0.0.0.0 --gateway.port 26659 --p2p.network arabica-8
+    volumes:
+      - ./data/light-node-y:/home/celestia/.celestia-light-arabica-8/
+  light-node-z:
+    image: ghcr.io/celestiaorg/celestia-node:v0.11.0-rc2
+    restart: unless-stopped
+    expose:
+      - "26659"
+    ports:
+      - "26659:26659"
+    environment:
+      - NODE_TYPE=light
+      - P2P_NETWORK=arabica-8
+    command: celestia light start --core.ip consensus-full-arabica-8.celestia-arabica.com --gateway --gateway.addr 0.0.0.0 --gateway.port 26659 --p2p.network arabica-8
+    volumes:
+      - ./data/light-node-z:/home/celestia/.celestia-light-arabica-8/
