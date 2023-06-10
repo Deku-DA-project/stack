@@ -45,7 +45,7 @@ services:
     expose:
       - "26659"
     ports:
-      - "26659:26659"
+      - "26658:26658"
     environment:
       - NODE_TYPE=light
       - P2P_NETWORK=arabica-8
